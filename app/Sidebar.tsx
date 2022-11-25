@@ -8,7 +8,7 @@ import boardIcon from "../public/assets/icon-board.svg";
 
 function Sidebar() {
   return (
-    <aside className="flex flex-col h-full items-start  col-span-2 py-3 border-r dark:border-gray-600 bg-gray-50 dark:bg-dark-side ">
+    <aside className=" hidden md:flex flex-col h-full items-start  col-span-2 py-3 border-r dark:border-gray-600 bg-white dark:bg-dark-side shadow">
       <div className="ml-4 lg:ml-6 h-12 flex items-center pr-4 ">
         <Link href="/" className=" relative w-32 h-6  ">
           <Image
@@ -27,7 +27,7 @@ function Sidebar() {
       </div>
       <div className="flex flex-1 flex-col mt-6 items-start justify-between w-full px-5  ">
         <div className="flex flex-col w-full  ">
-          <p className="dark:text-gray-400 font-medium text-xs tracking-widest pl-5 ">
+          <p className="text-gray-600 dark:text-gray-400 font-medium text-xs tracking-widest ">
             ALL BOARDS (3)
           </p>
           <div className="mt-3">
