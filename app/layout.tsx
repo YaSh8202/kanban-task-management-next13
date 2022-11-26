@@ -1,6 +1,6 @@
 import { unstable_getServerSession } from "next-auth";
 import "../styles/globals.css";
-import Providers from "./providers/providers";
+import Providers from "./(providers)/providers";
 
 export default async function RootLayout({
   children,

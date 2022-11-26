@@ -1,20 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import darkLogo from "../public/logo-dark.svg";
 import lightLogo from "../public/assets/logo-light.svg";
 import ThemeSwitch from "./ThemeSwitch";
 import Link from "next/link";
 import boardIcon from "../public/assets/icon-board.svg";
-import MemoIconBoard from "./IconBoard";
+import MemoIconBoard from "./(iconsSvgr)/IconBoard";
 import { useSession } from "next-auth/react";
 import MyModal from "./(headlessComponents)/ModalComponent";
 import AddBoardModal from "./(Modals)/AddBoardModal";
+import AppContext from "./(providers)/contextProvider";
 
 function Sidebar() {
   const { data: session, status } = useSession();
   const [addBoardModal, setAddBoardModal] = useState(false);
+  const { setShowSidebar } = useContext(AppContext);
 
   async function addNewBoard() {
     console.log("add new board");
@@ -55,14 +57,14 @@ function Sidebar() {
           <p className="text-gray-600 dark:text-gray-400 font-medium text-xs tracking-widest ">
             ALL BOARDS (3)
           </p>
-          <div className="mt-3">
+          <div className="mt-3 flex flex-col space-y-3 ">
             <button className=" rounded-r-full bg-primary  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-white ">
               <Image alt="logo" src={boardIcon} className=" fill-white " />
               <p>Platform Launch</p>
             </button>
             <button
               onClick={addNewBoard}
-              className=" rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-primary "
+              className=" rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-primary hover:bg-gray-100 duration-100 "
             >
               <MemoIconBoard className="text-primary" />
               <p>+Create New Board</p>
@@ -71,7 +73,12 @@ function Sidebar() {
         </div>
         <div className="w-full">
           <ThemeSwitch />
-          <div className="mt-4 mb-6 flex items-center space-x-2  ">
+          <button
+            onClick={() => {
+              setShowSidebar(false);
+            }}
+            className="mt-4 mb-6 flex items-center space-x-2  "
+          >
             <svg width="18" height="16" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M8.522 11.223a4.252 4.252 0 0 1-3.654-5.22l3.654 5.22ZM9 12.25A8.685 8.685 0 0 1 1.5 8a8.612 8.612 0 0 1 2.76-2.864l-.86-1.23A10.112 10.112 0 0 0 .208 7.238a1.5 1.5 0 0 0 0 1.524A10.187 10.187 0 0 0 9 13.75c.414 0 .828-.025 1.239-.074l-1-1.43A8.88 8.88 0 0 1 9 12.25Zm8.792-3.488a10.14 10.14 0 0 1-4.486 4.046l1.504 2.148a.375.375 0 0 1-.092.523l-.648.453a.375.375 0 0 1-.523-.092L3.19 1.044A.375.375 0 0 1 3.282.52L3.93.068a.375.375 0 0 1 .523.092l1.735 2.479A10.308 10.308 0 0 1 9 2.25c3.746 0 7.031 2 8.792 4.988a1.5 1.5 0 0 1 0 1.524ZM16.5 8a8.674 8.674 0 0 0-6.755-4.219A1.75 1.75 0 1 0 12.75 5v-.001a4.25 4.25 0 0 1-1.154 5.366l.834 1.192A8.641 8.641 0 0 0 16.5 8Z"
@@ -81,7 +88,7 @@ function Sidebar() {
             <p className="text-gray-600 dark:text-dark-gray text-sm ">
               Hide Sidebar
             </p>
-          </div>
+          </button>
         </div>
       </div>
       <AddBoardModal isOpen={addBoardModal} setIsOpen={setAddBoardModal} />

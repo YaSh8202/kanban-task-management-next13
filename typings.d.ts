@@ -13,13 +13,13 @@ export type Task = {
 };
 
 export type Column = {
-  id: string;
+  id?: string;
   name: string;
   tasks: Task[];
 };
 
 export type Board = {
-  id: string;
+  id?: string;
   name: string;
   columns: Column[];
 };

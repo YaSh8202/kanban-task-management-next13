@@ -1,41 +1,151 @@
+"use client";
+
 import { Dialog } from "@headlessui/react";
-import React from "react";
+import React, { useState } from "react";
 import MyModal from "../(headlessComponents)/ModalComponent";
+import { useForm, Resolver, useFieldArray } from "react-hook-form";
+import Image from "next/image";
+import iconCross from "public/assets/icon-cross.svg";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 };
 
+type FormValues = {
+  name: string;
+  columns: {
+    name: string;
+  }[];
+};
+
+const resolver: Resolver<FormValues> = async (values) => {
+  return {
+    values: values.name ? values : {},
+    errors: !values.name
+      ? {
+          name: {
+            type: "required",
+            message: "Board Name is required",
+          },
+        }
+      : values.columns.length === 0
+      ? {
+          columns: {
+            type: "required",
+            message: "Please add at least 1 column",
+          },
+        }
+      : values.columns.some((column) => !column.name)
+      ? {
+          columns: {
+            type: "required",
+            message: "Column name is required",
+          },
+        }
+      : {},
+  };
+};
+
 function AddBoardModal({ isOpen, setIsOpen }: Props) {
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver,
+    defaultValues: {
+      name: "",
+      columns: [{ name: "" }],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    name: "columns",
+    control,
+    rules: {
+      required: "Please add at least 1 column",
+      validate: (value) => value.length > 0 || "Please add at least 1 column",
+    },
+  });
+
   function closeModal() {
     setIsOpen(false);
   }
+  const onSubmit = handleSubmit((data) => alert(JSON.stringify(data)));
+
   return (
     <MyModal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-dark-side p-6 text-left align-middle shadow-xl transition-all">
         <Dialog.Title
           as="h3"
-          className="text-lg font-medium leading-6 text-gray-900"
+          className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50 "
         >
-          Payment successful
+          Add New Board
         </Dialog.Title>
-        <div className="mt-2">
-          <p className="text-sm text-gray-500">
-            Your payment has been successfully submitted. We’ve sent you an
-            email with all of the details of your order.
-          </p>
-        </div>
+        <form className="mt-3 flex flex-col space-y-4 " onSubmit={onSubmit}>
+          <div className="flex flex-col space-y-0.5 ">
+            <label className="text-sm text-gray-600 font-medium dark:text-gray-300 ">
+              Board Name
+            </label>
+            <input
+              className="px-3 py-2 border border-gray-200 rounded-md placeholder:text-sm dark:border-gray-600 outline-none bg-transparent"
+              {...register("name")}
+              placeholder="e.g. Web Design"
+            />
+            {errors?.name && (
+              <p className="text-red-400 text-xs ">{errors.name.message}</p>
+            )}
+          </div>
+          <div className="flex flex-col ">
+            <label className="text-sm mb-1 text-gray-600 font-medium dark:text-gray-300 ">
+              Board Columns
+            </label>
 
-        <div className="mt-4">
+            {fields.map((field, index) => {
+              return (
+                <div
+                  key={field.id}
+                  className="flex flex-row items-center space-x-2 pb-3"
+                >
+                  <input
+                    className="px-3 py-2 border border-gray-200 rounded-md placeholder:text-sm dark:border-gray-600 outline-none bg-transparent flex-1 "
+                    {...register(`columns.${index}.name`)}
+                    placeholder="e.g. Web Design"
+                  />
+                  <button
+                    onClick={() => {
+                      remove(index);
+                    }}
+                  >
+                    <Image src={iconCross} alt="cross" />
+                  </button>
+                </div>
+              );
+            })}
+
+            {errors.columns && (
+              <p className="text-red-400 text-sm">{errors.columns?.message}</p>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                append({ name: "" });
+              }}
+              className="bg-transparent text-primary w-full py-1.5 rounded-full font-semibold hover:bg-light-main dark:hover:bg-gray-300 duration-100  "
+            >
+              +Add New Column
+            </button>
+          </div>
+
           <button
-            type="button"
-            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            onClick={closeModal}
+            className="bg-primary text-white w-full py-1.5 rounded-full font-semibold opacity-90 hover:opacity-100 duration-100"
+            type="submit"
           >
-            Got it, thanks!
+            Submit
           </button>
-        </div>
+        </form>
       </Dialog.Panel>
     </MyModal>
   );
