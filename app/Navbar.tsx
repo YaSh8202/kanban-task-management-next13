@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import addTaskMobile from "../public/assets/icon-add-task-mobile.svg";
+import MenuComponent from "./(headlessComponents)/Menu";
 
 function Navbar() {
   return (
@@ -8,7 +9,7 @@ function Navbar() {
       <h2 className="text-gray-800 dark:text-white text-xl font-semibold ">
         Platform Launch
       </h2>
-      <div className="flex flex-row items-center space-x-4 md:space-x-5" >
+      <div className="flex flex-row items-center space-x-4 md:space-x-5">
         <button className=" bg-primary/90 px-3 md:px-4 py-2 text-white rounded-full hover:bg-primary hover:shadow-md hover:scale-105 duration-100 ">
           <Image
             src={addTaskMobile}
@@ -17,15 +18,7 @@ function Navbar() {
           />
           <p className="hidden md:block font-medium  ">+Add New Task</p>
         </button>
-        <button className="pr-1  " >
-          <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
-            <g fill="#828FA3" fillRule="evenodd">
-              <circle cx="2.308" cy="2.308" r="2.308" />
-              <circle cx="2.308" cy="10" r="2.308" />
-              <circle cx="2.308" cy="17.692" r="2.308" />
-            </g>
-          </svg>
-        </button>
+        <MenuComponent />
       </div>
     </nav>
   );

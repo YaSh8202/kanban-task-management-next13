@@ -1,12 +1,37 @@
+"use client";
+
 import Image from "next/image";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import darkLogo from "../public/logo-dark.svg";
 import lightLogo from "../public/assets/logo-light.svg";
 import ThemeSwitch from "./ThemeSwitch";
 import Link from "next/link";
 import boardIcon from "../public/assets/icon-board.svg";
+import MemoIconBoard from "./IconBoard";
+import { useSession } from "next-auth/react";
+import MyModal from "./(headlessComponents)/ModalComponent";
+import AddBoardModal from "./(Modals)/AddBoardModal";
 
 function Sidebar() {
+  const { data: session, status } = useSession();
+  const [addBoardModal, setAddBoardModal] = useState(false);
+
+  async function addNewBoard() {
+    console.log("add new board");
+    // console.log(session?.user?.email, status);
+    // await fetch("/api/addBoard", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     name: "New Board",
+    //     id: session?.user?.email,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    setAddBoardModal(true);
+  }
+
   return (
     <aside className=" hidden md:flex flex-col h-full items-start  col-span-2 py-3 border-r dark:border-gray-600 bg-white dark:bg-dark-side shadow">
       <div className="ml-4 lg:ml-6 h-12 flex items-center pr-4 ">
@@ -35,6 +60,13 @@ function Sidebar() {
               <Image alt="logo" src={boardIcon} className=" fill-white " />
               <p>Platform Launch</p>
             </button>
+            <button
+              onClick={addNewBoard}
+              className=" rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-primary "
+            >
+              <MemoIconBoard className="text-primary" />
+              <p>+Create New Board</p>
+            </button>
           </div>
         </div>
         <div className="w-full">
@@ -52,6 +84,7 @@ function Sidebar() {
           </div>
         </div>
       </div>
+      <AddBoardModal isOpen={addBoardModal} setIsOpen={setAddBoardModal} />
     </aside>
   );
 }
