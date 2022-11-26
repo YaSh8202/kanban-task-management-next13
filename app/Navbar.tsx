@@ -3,11 +3,16 @@
 import Image from "next/image";
 import React, { useContext } from "react";
 import addTaskMobile from "../public/assets/icon-add-task-mobile.svg";
+import { Board } from "../typings";
 import MenuComponent from "./(headlessComponents)/Menu";
 import AppContext from "./(providers)/contextProvider";
 import LogoMobile from "/public/assets/logo-mobile.svg";
 
-function Navbar() {
+type Props = {
+  selectedBoard: Board | null;
+};
+
+function Navbar({ selectedBoard }: Props) {
   const { showSidebar, setShowSidebar } = useContext(AppContext);
 
   return (
@@ -24,7 +29,7 @@ function Navbar() {
           // </button>
         )}
         <h2 className="text-gray-800 dark:text-white text-xl font-semibold ">
-          Platform Launch
+          {selectedBoard ? selectedBoard.name : "Kanban Board"}
         </h2>
       </div>
       <div className="flex flex-row items-center space-x-4 md:space-x-5">

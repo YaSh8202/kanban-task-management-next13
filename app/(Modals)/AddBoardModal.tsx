@@ -6,6 +6,10 @@ import MyModal from "../(headlessComponents)/ModalComponent";
 import { useForm, Resolver, useFieldArray } from "react-hook-form";
 import Image from "next/image";
 import iconCross from "public/assets/icon-cross.svg";
+import { useSession } from "next-auth/react";
+import { v4 as uuid } from "uuid";
+import useSWR from "swr";
+import { boardsFetcher } from "../../util/fetcher";
 
 type Props = {
   isOpen: boolean;
@@ -53,6 +57,7 @@ function AddBoardModal({ isOpen, setIsOpen }: Props) {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm<FormValues>({
     resolver,
     defaultValues: {
@@ -60,6 +65,12 @@ function AddBoardModal({ isOpen, setIsOpen }: Props) {
       columns: [{ name: "" }],
     },
   });
+  const { data: session } = useSession();
+  const {
+    data: boards,
+    error,
+    mutate,
+  } = useSWR("/api/getBoards", boardsFetcher);
 
   const { fields, append, remove } = useFieldArray({
     name: "columns",
@@ -73,7 +84,29 @@ function AddBoardModal({ isOpen, setIsOpen }: Props) {
   function closeModal() {
     setIsOpen(false);
   }
-  const onSubmit = handleSubmit((data) => alert(JSON.stringify(data)));
+
+  const onSubmit = handleSubmit(async (data) => {
+    closeModal();
+    const uploadBoardToUpstash = async () => {
+      const newBoard = await fetch("/api/addBoard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+          board: { ...data, id: uuid() },
+        }),
+      });
+      const { board } = await newBoard.json();
+      return [board, ...boards!];
+    };
+    await mutate(uploadBoardToUpstash, {
+      // optimisticData: [...boards!, data],
+      rollbackOnError: true,
+    });
+    reset();
+  });
 
   return (
     <MyModal isOpen={isOpen} setIsOpen={setIsOpen}>

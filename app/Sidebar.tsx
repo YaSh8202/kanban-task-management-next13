@@ -1,36 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import darkLogo from "../public/logo-dark.svg";
 import lightLogo from "../public/assets/logo-light.svg";
 import ThemeSwitch from "./ThemeSwitch";
 import Link from "next/link";
-import boardIcon from "../public/assets/icon-board.svg";
 import MemoIconBoard from "./(iconsSvgr)/IconBoard";
-import { useSession } from "next-auth/react";
-import MyModal from "./(headlessComponents)/ModalComponent";
 import AddBoardModal from "./(Modals)/AddBoardModal";
 import AppContext from "./(providers)/contextProvider";
+import { Board } from "../typings";
 
-function Sidebar() {
-  const { data: session, status } = useSession();
+type Props = {
+  boards: Board[] | undefined;
+};
+
+function Sidebar({ boards }: Props) {
   const [addBoardModal, setAddBoardModal] = useState(false);
-  const { setShowSidebar } = useContext(AppContext);
+  const { setShowSidebar, setSelectedBoard, selectedBoard } =
+    useContext(AppContext);
 
-  async function addNewBoard() {
-    console.log("add new board");
-    // console.log(session?.user?.email, status);
-    // await fetch("/api/addBoard", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     name: "New Board",
-    //     id: session?.user?.email,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
+  function addNewBoard() {
     setAddBoardModal(true);
   }
 
@@ -55,16 +45,31 @@ function Sidebar() {
       <div className="flex flex-1 flex-col mt-6 items-start justify-between w-full px-5  ">
         <div className="flex flex-col w-full  ">
           <p className="text-gray-600 dark:text-gray-400 font-medium text-xs tracking-widest ">
-            ALL BOARDS (3)
+            ALL BOARDS ({boards?.length})
           </p>
-          <div className="mt-3 flex flex-col space-y-3 ">
-            <button className=" rounded-r-full bg-primary  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-white ">
-              <Image alt="logo" src={boardIcon} className=" fill-white " />
-              <p>Platform Launch</p>
-            </button>
+          <div className="mt-3 flex flex-col space-y-1 ">
+            {boards &&
+              boards
+                .sort((a, b) => {
+                  return a.name?.localeCompare(b.name);
+                })
+                .map((board) => (
+                  <button
+                    key={board.id}
+                    onClick={() => setSelectedBoard(board)}
+                    className={` rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] ${
+                      selectedBoard && selectedBoard.id === board.id
+                        ? "bg-primary text-white "
+                        : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 "
+                    }  `}
+                  >
+                    <MemoIconBoard className="text-inherit" />
+                    <p className="font-semibold">{board.name}</p>
+                  </button>
+                ))}
             <button
               onClick={addNewBoard}
-              className=" rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-primary hover:bg-gray-100 duration-100 "
+              className=" rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-primary  duration-100 hover:brightness-125 "
             >
               <MemoIconBoard className="text-primary" />
               <p>+Create New Board</p>

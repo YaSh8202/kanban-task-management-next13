@@ -15,11 +15,11 @@ export type Task = {
 export type Column = {
   id?: string;
   name: string;
-  tasks: Task[];
+  tasks: string[]!;
 };
 
 export type Board = {
-  id?: string;
+  id: string;
   name: string;
-  columns: Column[];
+  columns: String[];
 };
