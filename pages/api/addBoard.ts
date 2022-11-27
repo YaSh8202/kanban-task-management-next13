@@ -36,20 +36,22 @@ export default async function handler(
     res.status(400).json({ error: "Missing board" });
   }
 
-  const columns = board.columns.map((column: { name: string }) => ({
-    name: column.name,
-    id: uuid(),
-    tasks: [],
-  }));
+  // const columns = board.columns.map((column: { name: string }) => ({
+  //   name: column.name,
+  //   id: uuid(),
+  //   tasks: [],
+  // }));
 
   const newBoard = {
     id: board.id,
     name: board.name,
-    columns: columns.map((column: { id: string; name: string }) => column.id),
+    columns: board.columns.map(
+      (column: { id: string; name: string }) => column.id
+    ),
   };
 
   await redis.hset(email, board.id, JSON.stringify(newBoard));
-  columns.forEach(async (column: { id: string; name: string }) => {
+  board.columns.forEach(async (column: { id: string; name: string }) => {
     await redis.hset(board.id, column.id, JSON.stringify(column));
   });
 

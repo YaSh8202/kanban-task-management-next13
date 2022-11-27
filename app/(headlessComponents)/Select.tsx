@@ -13,11 +13,8 @@ type Props = {
 };
 
 export default function Select({ options, selected, setSelected }: Props) {
-  // const [selected, setSelected] = useState(people[0]);
 
-  console.log("selected", selected);
   return (
-    // <div className="fixed top-16 w-72">
     <Listbox value={selected} onChange={setSelected}>
       <div className="relative mt-1">
         <Listbox.Button className="relative w-full cursor-default rounded-md bg-transparent py-2 pl-3 pr-10 text-left focus:outline-none  focus-visible:ring-1 focus-visible:ring-gray-300 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 sm:text-sm border-gray-200 dark:border-gray-600 border ">

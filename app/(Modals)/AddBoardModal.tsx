@@ -87,6 +87,12 @@ function AddBoardModal({ isOpen, setIsOpen }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     closeModal();
+    const clientBoard = {
+      id: uuid(),
+      name: data.name,
+      columns: data.columns.map((col) => uuid()),
+    };
+
     const uploadBoardToUpstash = async () => {
       const newBoard = await fetch("/api/addBoard", {
         method: "POST",
@@ -95,14 +101,22 @@ function AddBoardModal({ isOpen, setIsOpen }: Props) {
         },
         body: JSON.stringify({
           email: session?.user?.email,
-          board: { ...data, id: uuid() },
+          board: {
+            name: data.name,
+            id: clientBoard.id,
+            columns: data.columns.map((col, i) => ({
+              id: clientBoard.columns[i],
+              name: col.name,
+              tasks: [],
+            })),
+          },
         }),
       });
       const { board } = await newBoard.json();
       return [board, ...boards!];
     };
     await mutate(uploadBoardToUpstash, {
-      // optimisticData: [...boards!, data],
+      optimisticData: [...boards!, clientBoard],
       rollbackOnError: true,
     });
     reset();
