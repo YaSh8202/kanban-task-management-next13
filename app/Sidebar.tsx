@@ -48,7 +48,7 @@ function Sidebar({ boards }: Props) {
             ALL BOARDS ({boards?.length})
           </p>
           <div className="mt-3 flex flex-col space-y-1 ">
-            {boards &&
+            {boards ? (
               boards
                 .sort((a, b) => {
                   return a.name?.localeCompare(b.name);
@@ -66,7 +66,10 @@ function Sidebar({ boards }: Props) {
                     <MemoIconBoard className="text-inherit" />
                     <p className="font-semibold">{board.name}</p>
                   </button>
-                ))}
+                ))
+            ) : (
+              <p>Loading...</p>
+            )}
             <button
               onClick={addNewBoard}
               className=" rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] text-primary  duration-100 hover:brightness-125 "

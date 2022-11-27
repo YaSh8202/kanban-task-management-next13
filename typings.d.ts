@@ -1,6 +1,6 @@
 export type SubTask = {
   id: string;
-  title: string;
+  name: string;
   isCompleted: boolean;
 };
 
@@ -9,7 +9,7 @@ export type Task = {
   title: string;
   description: string;
   status: string;
-  subTasks: SubTask[];
+  subtasks: SubTask[];
 };
 
 export type Column = {

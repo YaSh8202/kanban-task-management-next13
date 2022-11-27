@@ -1,5 +1,7 @@
 import React from "react";
+import useSWR from "swr";
 import { Column } from "../typings";
+import { TasksFetcher } from "../util/fetcher";
 import Task from "./Task";
 
 type Props = {
@@ -7,6 +9,11 @@ type Props = {
 };
 
 function Column({ column }: Props) {
+  const { data: tasks, error } = useSWR(
+    `/api/tasks/${column.id}`,
+    TasksFetcher
+  );
+
   return (
     <div className="flex flex-col items-start w-72 space-y-5 mx-3 ">
       <div className="flex flex-row items-center text-gray-500 space-x-2 ">
@@ -15,10 +22,10 @@ function Column({ column }: Props) {
           {column.name} ({column.tasks?.length})
         </p>
       </div>
-      {column.tasks &&
-        column.tasks.map((task) => (
-          <div key={task} className="w-full">
-            <Task />
+      {tasks &&
+        tasks.map((task) => (
+          <div key={task.id} className="w-full">
+            <Task task={task} />
           </div>
         ))}
     </div>

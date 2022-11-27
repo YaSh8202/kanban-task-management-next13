@@ -49,7 +49,6 @@ export default async function handler(
   };
 
   await redis.hset(email, board.id, JSON.stringify(newBoard));
-  // await redis.hset(board.id , JSON.stringify(columns));
   columns.forEach(async (column: { id: string; name: string }) => {
     await redis.hset(board.id, column.id, JSON.stringify(column));
   });
