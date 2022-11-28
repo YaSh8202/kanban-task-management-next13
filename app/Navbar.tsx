@@ -18,20 +18,21 @@ function Navbar({ selectedBoard }: Props) {
     useContext(AppContext);
 
   return (
-    <nav className="h-20 flex w-full items-center border-b dark:border-gray-600 bg-white dark:bg-dark-side px-4 justify-between ">
-      <div className="flex flex-row items-end">
-        {!showSidebar && (
-          // <button className="  rotate-90 " onClick={() => setShowSidebar(true)}>
+    <nav className="h-20 flex w-full items-center border-b dark:border-gray-600 bg-white dark:bg-dark-side px-8 justify-between ">
+      <div className="flex flex-row items-center">
+        <button
+          className={` ${showSidebar ? "hidden" : "block"} `}
+          onClick={() => setShowSidebar(true)}
+        >
           <Image
             onClick={() => setShowSidebar(true)}
             src={LogoMobile}
             alt="logoMobile"
-            className="mr-3 rotate-90 "
+            className="mr-3 w-5 h-5 "
           />
-          // </button>
-        )}
+        </button>
         <h2 className="text-gray-800 dark:text-white text-xl font-semibold ">
-          {selectedBoard ? selectedBoard.name : "Kanban Board"}
+          {selectedBoard ? selectedBoard.name : "Select a Kanban Board"}
         </h2>
       </div>
       <div className="flex flex-row items-center space-x-4 md:space-x-5">

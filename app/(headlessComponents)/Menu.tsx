@@ -27,8 +27,8 @@ export default function MenuComponent() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-primary border-gray-400 shadow-lg ring ring-black ring-opacity-5 focus:outline-none">
-          <div className="px-1 py-1 ">
+        <Menu.Items className="absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-primary border-gray-400 shadow-lg ring ring-black ring-opacity-5 focus:outline-none   ">
+          <div className="px-1 py-1  ">
             <Menu.Item>
               {({ active }) => (
                 <button
@@ -37,7 +37,21 @@ export default function MenuComponent() {
                     active
                       ? "bg-primary text-white"
                       : "text-gray-900 bg-white dark:text-gray-100 dark:bg-dark-side/80 "
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm font-semibold  `}
+                  } group flex w-full items-center  px-2 py-2 text-sm font-semibold  `}
+                >
+                  Edit Board
+                </button>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => signOut()}
+                  className={`${
+                    active
+                      ? "bg-primary text-white"
+                      : "text-gray-900 bg-white dark:text-gray-100 dark:bg-dark-side/80 "
+                  } group flex w-full items-center px-2 py-2 text-sm font-semibold  `}
                 >
                   Logout
                 </button>

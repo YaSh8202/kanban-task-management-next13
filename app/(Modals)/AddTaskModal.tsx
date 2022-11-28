@@ -6,18 +6,15 @@ import MyModal from "../(headlessComponents)/ModalComponent";
 import { useForm, Resolver, useFieldArray } from "react-hook-form";
 import Image from "next/image";
 import iconCross from "public/assets/icon-cross.svg";
-import { useSession } from "next-auth/react";
 import { v4 as uuid } from "uuid";
 import useSWR from "swr";
 import {
-  boardsFetcher,
   columnsFetcher,
   TasksFetcher,
 } from "../../util/fetcher";
 import Select from "../(headlessComponents)/Select";
 import AppContext from "../(providers)/contextProvider";
 import { Column } from "../../typings";
-import Task from "../Task";
 
 type Props = {
   isOpen: boolean;
@@ -28,7 +25,6 @@ type FormValues = {
   title: string;
   description: string;
   subtasks: { name: string }[];
-  status: string;
 };
 
 const resolver: Resolver<FormValues> = async (values) => {
@@ -38,7 +34,7 @@ const resolver: Resolver<FormValues> = async (values) => {
       ? {
           title: {
             type: "required",
-            message: "Board Name is required",
+            message: "Task title is required",
           },
         }
       : {},
@@ -76,7 +72,6 @@ function AddTaskModal({ isOpen, setIsOpen }: Props) {
     },
   });
   const { selectedBoard } = useContext(AppContext);
-  const { data: session } = useSession();
   const {
     data: columns,
     error,
@@ -114,6 +109,7 @@ function AddTaskModal({ isOpen, setIsOpen }: Props) {
       task: {
         ...data,
         id: uuid(),
+        status: selectedColumn?.name,
         subtasks: data.subtasks.map((subtask) => ({
           ...subtask,
           id: uuid(),
@@ -143,7 +139,12 @@ function AddTaskModal({ isOpen, setIsOpen }: Props) {
   });
 
   return (
-    <MyModal isOpen={isOpen} setIsOpen={setIsOpen}>
+    <MyModal
+      isOpen={isOpen}
+      closeModal={() => {
+        setIsOpen(false);
+      }}
+    >
       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-dark-side p-6 text-left align-middle shadow-xl transition-all">
         <Dialog.Title
           as="h3"

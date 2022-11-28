@@ -123,7 +123,7 @@ function AddBoardModal({ isOpen, setIsOpen }: Props) {
   });
 
   return (
-    <MyModal isOpen={isOpen} setIsOpen={setIsOpen}>
+    <MyModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-dark-side p-6 text-left align-middle shadow-xl transition-all">
         <Dialog.Title
           as="h3"

@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import redis from "../../redis";
+import redis from "../../../redis";
 import { v4 as uuid } from "uuid";
-import { Board, Task } from "../../typings";
+import { Board, Task } from "../../../typings";
 import { getSession } from "next-auth/react";
 
 type Data = {
@@ -29,21 +29,16 @@ export default async function handler(
     return;
   }
 
-  const { boardId, columnId, task } = req.body;
-
-  if (!boardId || !columnId || !task) {
+  const { columnId, task, newColumnId } = req.body;
+  if (!columnId || !task || !newColumnId) {
     res.status(400).json({ error: "Missing task data" });
     return;
   }
 
   try {
-    await redis.hset(columnId, task.id, JSON.stringify(task));
-    const columnString = await redis.hget(boardId, columnId);
-    if (columnString) {
-      const column = JSON.parse(columnString);
-      column.tasks.push(task.id);
-      await redis.hset(boardId, columnId, JSON.stringify(column));
-    }
+    await redis.hdel(columnId, task.id);
+    await redis.hset(newColumnId, task.id, JSON.stringify(task));
+
     res.status(200).json({ task: task });
   } catch (e) {
     res.status(500).json({ error: "Internal server error" });

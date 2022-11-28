@@ -3,24 +3,16 @@ import { Fragment, useState } from "react";
 
 type Props = {
   isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
+  closeModal: (v: boolean) => void;
   children: React.ReactNode;
 };
 
 export default function MyModal({
   children,
   isOpen = false,
-  setIsOpen,
+  closeModal,
 }: Props) {
   // let [isOpen, setIsOpen] = useState(true);
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
 
   return (
     <>

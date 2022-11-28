@@ -25,7 +25,7 @@ function Sidebar({ boards }: Props) {
   }
 
   return (
-    <aside className=" hidden md:flex flex-col h-full items-start  col-span-2 py-3 border-r dark:border-gray-600 bg-white dark:bg-dark-side shadow">
+    <aside className=" absolute md:relative w-4/5 md:w-auto z-10 flex flex-col h-full items-start  md:col-span-2 py-3 border-r dark:border-gray-600 bg-white dark:bg-dark-side shadow">
       <div className="ml-4 lg:ml-6 h-12 flex items-center pr-4 ">
         <Link href="/" className=" relative w-32 h-6  ">
           <Image
@@ -56,7 +56,10 @@ function Sidebar({ boards }: Props) {
                 .map((board) => (
                   <button
                     key={board.id}
-                    onClick={() => setSelectedBoard(board)}
+                    onClick={() => {
+                      setSelectedBoard(board);
+                      if (window.innerWidth < 768) setShowSidebar(false);
+                    }}
                     className={` rounded-r-full  py-2.5 w-full text-left pl-5 flex flex-row items-center space-x-2 ml-[-20px] ${
                       selectedBoard && selectedBoard.id === board.id
                         ? "bg-primary text-white "
