@@ -41,15 +41,27 @@ function Column({ column }: Props) {
           } rounded-full`}
         ></span>
         <p className=" font-semibold text-xs uppercase tracking-widest">
-          {column.name} ({column.tasks?.length})
+          {column.name} ({tasks?.length})
         </p>
       </div>
-      {tasks &&
+      {tasks ? (
         tasks.map((task) => (
           <div key={task.id} className="w-full">
             <Task task={task} />
           </div>
-        ))}
+        ))
+      ) : (
+        <div
+          role="status"
+          className="p-4 max-w-sm rounded border border-gray-200 shadow animate-pulse md:p-6 dark:border-gray-700 h-[8rem] mr-4 "
+        >
+          <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+          <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+          <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+          <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+          <span className="sr-only">Loading...</span>
+        </div>
+      )}
     </div>
   );
 }

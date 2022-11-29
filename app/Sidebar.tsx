@@ -16,12 +16,11 @@ type Props = {
 };
 
 function Sidebar({ boards }: Props) {
-  const [addBoardModal, setAddBoardModal] = useState(false);
-  const { setShowSidebar, setSelectedBoard, selectedBoard } =
+  const { setShowSidebar, setSelectedBoard, selectedBoard, setShowBoardModal } =
     useContext(AppContext);
 
   function addNewBoard() {
-    setAddBoardModal(true);
+    setShowBoardModal(true);
   }
 
   return (
@@ -102,7 +101,6 @@ function Sidebar({ boards }: Props) {
           </button>
         </div>
       </div>
-      <AddBoardModal isOpen={addBoardModal} setIsOpen={setAddBoardModal} />
     </aside>
   );
 }

@@ -1,10 +1,13 @@
 "use client";
 
 import { Menu, Transition } from "@headlessui/react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import { Fragment, useEffect, useRef, useState } from "react";
 
 export default function MenuComponent() {
+  const { data: session } = useSession();
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -31,8 +34,35 @@ export default function MenuComponent() {
           <div className="px-1 py-1  ">
             <Menu.Item>
               {({ active }) => (
-                <button
+                <div
                   onClick={() => signOut()}
+                  className={`${
+                    active
+                      ? "bg-primary text-white"
+                      : "text-gray-900 bg-white dark:text-gray-100 dark:bg-dark-side/80 "
+                  } group flex w-full items-center  px-2 py-2 text-sm font-semibold  `}
+                >
+                  {session && (
+                    <div className="flex flex-row items-center overflow-hidden space-x-1.5 ">
+                      <Image
+                        width={24}
+                        height={24}
+                        src={session?.user?.image!}
+                        alt="user"
+                        className=" rounded-full"
+                      />
+                      <p title={session.user?.name || ""} className="truncate">
+                        {session.user?.name}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => {}}
                   className={`${
                     active
                       ? "bg-primary text-white"

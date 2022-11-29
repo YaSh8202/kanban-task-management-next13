@@ -13,7 +13,7 @@ function Boards() {
   } = useSWR(["/api/getColumns", selectedBoard?.id], columnsFetcher);
 
   return (
-    <div className="overflow-y-hidden overflow-x-auto flex flex-row bg-light-main dark:bg-dark-main h-full p-5 flex-1 ">
+    <div className="overflow-y-hidden overflow-x-auto flex flex-row bg-light-main dark:bg-dark-main p-5 scrollbar-thin dark:scrollbar-thumb-dark-side dark:scrollbar-track-dark-main flex-1 scrollbar-thumb-gray-400 scrollbar-track-light-main ">
       {columns &&
         columns.map((column) => <Column key={column.id} column={column} />)}
     </div>

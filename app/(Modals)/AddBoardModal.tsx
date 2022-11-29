@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@headlessui/react";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import MyModal from "../(headlessComponents)/ModalComponent";
 import { useForm, Resolver, useFieldArray } from "react-hook-form";
 import Image from "next/image";
@@ -10,10 +10,17 @@ import { useSession } from "next-auth/react";
 import { v4 as uuid } from "uuid";
 import useSWR from "swr";
 import { boardsFetcher } from "../../util/fetcher";
+import AppContext from "../(providers)/contextProvider";
 
 type Props = {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
+  data?: {
+    id: string;
+    name: string;
+    columns: {
+      id: string;
+      name: string;
+    }[];
+  };
 };
 
 type FormValues = {
@@ -51,7 +58,9 @@ const resolver: Resolver<FormValues> = async (values) => {
   };
 };
 
-function AddBoardModal({ isOpen, setIsOpen }: Props) {
+function AddBoardModal({ data }: Props) {
+  const { showBoardModal: isOpen, setShowBoardModal: setIsOpen } =
+    useContext(AppContext);
   const {
     register,
     handleSubmit,
