@@ -14,13 +14,12 @@ function Dashboard() {
 
   const { data: boards } = useSWR("/api/getBoards", boardsFetcher);
 
-  console.log("boards", boards);
-
+  
   return (
     <main className="grid grid-cols-10 grid-rows-1 min-h-screen min-w-full ">
-      {showSidebar && <Sidebar boards={boards} />}
+      <Sidebar boards={boards} />
       <div
-        className={`col-span-10 flex flex-col ${
+        className={`col-span-10 flex flex-col h-full transition-all duration-300 ${
           showSidebar ? "md:col-span-8" : "md:col-span-10"
         }    `}
       >

@@ -4,9 +4,9 @@ import React from "react";
 
 function SignInPage() {
   return (
-    <main className=" container h-screen flex flex-col items-center justify-center">
-      <div className="">
-        <h1 className="text-primary  text-3xl font-bold ">
+    <main className="h-screen w-screen flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="text-primary  text-3xl font-bold  ">
           Kanban Task Management
         </h1>
         <button

@@ -18,7 +18,7 @@ function Navbar({ selectedBoard }: Props) {
     useContext(AppContext);
 
   return (
-    <nav className="h-20 flex w-full items-center border-b dark:border-gray-600 bg-white dark:bg-dark-side px-8 justify-between ">
+    <nav className="h-20 flex w-full items-center border-b dark:border-gray-600 bg-white dark:bg-dark-side  px-5 md:px-8 justify-between ">
       <div className="flex flex-row items-center">
         <button
           className={` ${showSidebar ? "hidden" : "block"} `}

@@ -35,10 +35,10 @@ export default function MenuComponent() {
             <Menu.Item>
               {({ active }) => (
                 <div
-                  onClick={() => signOut()}
+                  // onClick={() => signOut()}
                   className={`${
                     active
-                      ? "bg-primary text-white"
+                      ? "bg-primary text-white cursor-default "
                       : "text-gray-900 bg-white dark:text-gray-100 dark:bg-dark-side/80 "
                   } group flex w-full items-center  px-2 py-2 text-sm font-semibold  `}
                 >
@@ -59,7 +59,7 @@ export default function MenuComponent() {
                 </div>
               )}
             </Menu.Item>
-            <Menu.Item>
+            {/* <Menu.Item>
               {({ active }) => (
                 <button
                   onClick={() => {}}
@@ -72,7 +72,7 @@ export default function MenuComponent() {
                   Edit Board
                 </button>
               )}
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item>
               {({ active }) => (
                 <button
