@@ -5,7 +5,7 @@ import { Board } from "../../typings";
 import { getSession } from "next-auth/react";
 
 type Data = {
-  board: Board;
+  message: string;
 };
 
 type Error = {
@@ -22,37 +22,30 @@ export default async function handler(
   }
 
   // get user id from session
-  const { board } = req.body;
+  const {
+    boardId,
+    columns,
+  }: {
+    boardId: string;
+    columns: string[];
+  } = req.body;
   const session = await getSession({ req });
   if (!session?.user?.email) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
-
-  const email = session?.user?.email;
-
-  if (!board) {
+  if (!boardId || !columns) {
     res.status(400).json({ error: "Missing board" });
   }
 
-  // const columns = board.columns.map((column: { name: string }) => ({
-  //   name: column.name,
-  //   id: uuid(),
-  //   tasks: [],
-  // }));
-
-  const newBoard = {
-    id: board.id,
-    name: board.name,
-    columns: board.columns.map(
-      (column: { id: string; name: string }) => column.id
-    ),
-  };
-
-  await redis.hset(email, board.id, JSON.stringify(newBoard));
-  board.columns.forEach(async (column: { id: string; name: string }) => {
-    await redis.hset(board.id, column.id, JSON.stringify(column));
-  });
-
-  res.status(200).json({ board: newBoard });
+  try {
+    columns.forEach(async (column: string) => {
+      await redis.hdel(boardId, column);
+      await redis.del(column);
+    });
+    res.status(200).json({ message: "Columns deleted" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "Something went wrong" });
+  }
 }

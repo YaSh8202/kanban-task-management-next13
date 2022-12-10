@@ -37,7 +37,7 @@ function ViewTaskModal({ isOpen, setIsOpen, task }: Props) {
     data: columns,
     error,
     mutate,
-  } = useSWR(["/api/getColumns", selectedBoard?.id], columnsFetcher);
+  } = useSWR(`/api/getColumns?boardId=${selectedBoard?.id}`, columnsFetcher);
 
   const [selectedColumn, setSelectedColumn] = useState<Column | undefined>(
     columns &&

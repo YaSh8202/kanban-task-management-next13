@@ -3,10 +3,12 @@
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import AppContext from "../(providers)/contextProvider";
 
 export default function MenuComponent() {
   const { data: session } = useSession();
+  const { setShowEditBoardModal } = useContext(AppContext);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -59,10 +61,12 @@ export default function MenuComponent() {
                 </div>
               )}
             </Menu.Item>
-            {/* <Menu.Item>
+            <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={() => {}}
+                  onClick={() => {
+                    setShowEditBoardModal(true);
+                  }}
                   className={`${
                     active
                       ? "bg-primary text-white"
@@ -72,7 +76,7 @@ export default function MenuComponent() {
                   Edit Board
                 </button>
               )}
-            </Menu.Item> */}
+            </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <button

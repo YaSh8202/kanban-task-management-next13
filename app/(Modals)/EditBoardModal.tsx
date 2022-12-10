@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog } from "@headlessui/react";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import MyModal from "../(headlessComponents)/ModalComponent";
 import { useForm, Resolver, useFieldArray } from "react-hook-form";
 import Image from "next/image";
@@ -9,25 +9,20 @@ import iconCross from "public/assets/icon-cross.svg";
 import { useSession } from "next-auth/react";
 import { v4 as uuid } from "uuid";
 import useSWR from "swr";
-import { boardsFetcher } from "../../util/fetcher";
 import AppContext from "../(providers)/contextProvider";
-
-type Props = {
-  data?: {
-    id: string;
-    name: string;
-    columns: {
-      id: string;
-      name: string;
-    }[];
-  };
-};
+import { Column } from "../../typings";
+import { columnsFetcher } from "../../util/fetcher";
 
 type FormValues = {
   name: string;
   columns: {
+    id: string;
     name: string;
   }[];
+};
+
+type Props = {
+  columns: Column[] | undefined;
 };
 
 const resolver: Resolver<FormValues> = async (values) => {
@@ -58,12 +53,13 @@ const resolver: Resolver<FormValues> = async (values) => {
   };
 };
 
-function AddBoardModal({ data }: Props) {
+function EditBoardModal({ columns }: Props) {
   const {
-    showBoardModal: isOpen,
-    setShowBoardModal: setIsOpen,
-    setSelectedBoard,
+    showEditBoardModal: isOpen,
+    setShowEditBoardModal: setIsOpen,
+    selectedBoard,
   } = useContext(AppContext);
+  const [removeColumns, setRemoveColumns] = React.useState<string[]>([]);
   const {
     register,
     handleSubmit,
@@ -73,16 +69,11 @@ function AddBoardModal({ data }: Props) {
   } = useForm<FormValues>({
     resolver,
     defaultValues: {
-      name: "",
-      columns: [{ name: "" }],
+      name: selectedBoard?.name || "",
+      columns: columns?.map((col) => ({ name: col.name, id: col.id })),
     },
   });
   const { data: session } = useSession();
-  const {
-    data: boards,
-    error,
-    mutate,
-  } = useSWR("/api/getBoards", boardsFetcher);
 
   const { fields, append, remove } = useFieldArray({
     name: "columns",
@@ -94,17 +85,49 @@ function AddBoardModal({ data }: Props) {
   });
 
   function closeModal() {
+    reset();
+    setRemoveColumns([]);
     setIsOpen(false);
   }
 
-  const onSubmit = handleSubmit(async (data) => {
-    closeModal();
-    const clientBoard = {
-      id: uuid(),
-      name: data.name,
-      columns: data.columns.map((col) => uuid()),
-    };
+  const { mutate: mutateColumns, data } = useSWR(
+    `/api/getColumns?boardId=${selectedBoard?.id}`,
+    columnsFetcher
+  );
 
+  useEffect(() => {
+    reset({
+      name: selectedBoard?.name || "",
+      columns: columns?.map((col) => ({ name: col.name, id: col.id })),
+    });
+  }, [selectedBoard, columns, data]);
+
+  const onSubmit = handleSubmit(async (data) => {
+    const clientBoard = {
+      id: selectedBoard?.id!,
+      name: data.name,
+      columns: data.columns.map((col) => col.id),
+    };
+    if (removeColumns.length > 0) {
+      const askUser = confirm(
+        "Are you sure you want to delete the selected columns? This action cannot be undone."
+      );
+      if (!askUser) {
+        reset();
+        return;
+      }
+      await fetch("/api/deleteColumns", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          columns: removeColumns,
+          boardId: selectedBoard?.id!,
+        }),
+      });
+    }
+    closeModal();
     const uploadBoardToUpstash = async () => {
       const newBoard = await fetch("/api/addBoard", {
         method: "POST",
@@ -119,19 +142,29 @@ function AddBoardModal({ data }: Props) {
             columns: data.columns.map((col, i) => ({
               id: clientBoard.columns[i],
               name: col.name,
-              tasks: [],
             })),
           },
         }),
       });
       const { board } = await newBoard.json();
-      return [board, ...boards!];
+      console.log("board", board);
+      return data.columns.map((col, i) => ({
+        id: clientBoard.columns[i],
+        name: col.name,
+        // tasks: [],
+      }));
     };
-    await mutate(uploadBoardToUpstash, {
-      optimisticData: [...boards!, clientBoard],
+    // await uploadBoardToUpstash();
+    // await globalMutate("/api/getColumns");
+    // await uploadBoardToUpstash();
+    mutateColumns(uploadBoardToUpstash, {
+      optimisticData: data.columns.map((col, i) => ({
+        id: clientBoard.columns[i],
+        name: col.name,
+        // tasks: [],
+      })),
       rollbackOnError: true,
     });
-    setSelectedBoard(clientBoard);
 
     reset();
   });
@@ -143,7 +176,7 @@ function AddBoardModal({ data }: Props) {
           as="h3"
           className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50 "
         >
-          Add New Board
+          Edit Board
         </Dialog.Title>
         <form className="mt-3 flex flex-col space-y-4 " onSubmit={onSubmit}>
           <div className="flex flex-col space-y-0.5 ">
@@ -177,6 +210,13 @@ function AddBoardModal({ data }: Props) {
                   />
                   <button
                     onClick={() => {
+                      const col = columns?.find(
+                        (col) => col.name === field.name
+                      );
+                      if (col) {
+                        console.log(col.id);
+                        setRemoveColumns([...removeColumns, col.id]);
+                      }
                       remove(index);
                     }}
                   >
@@ -192,7 +232,7 @@ function AddBoardModal({ data }: Props) {
             <button
               type="button"
               onClick={() => {
-                append({ name: "" });
+                append({ name: "", id: uuid() });
               }}
               className="bg-transparent text-primary w-full py-1.5 rounded-full font-semibold hover:bg-light-main dark:hover:bg-gray-300 duration-100  "
             >
@@ -212,4 +252,4 @@ function AddBoardModal({ data }: Props) {
   );
 }
 
-export default AddBoardModal;
+export default EditBoardModal;

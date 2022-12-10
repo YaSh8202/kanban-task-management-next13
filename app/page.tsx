@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import useSWR from "swr";
 import { boardsFetcher } from "../util/fetcher";
 import AddBoardModal from "./(Modals)/AddBoardModal";
+import EditBoardModal from "./(Modals)/EditBoardModal";
 import AppContext from "./(providers)/contextProvider";
 import Boards from "./Boards";
 import Navbar from "./Navbar";
@@ -14,7 +15,6 @@ function Dashboard() {
 
   const { data: boards } = useSWR("/api/getBoards", boardsFetcher);
 
-  
   return (
     <main className="grid grid-cols-10 grid-rows-1 min-h-screen min-w-full ">
       <Sidebar boards={boards} />

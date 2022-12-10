@@ -8,10 +8,7 @@ import Image from "next/image";
 import iconCross from "public/assets/icon-cross.svg";
 import { v4 as uuid } from "uuid";
 import useSWR from "swr";
-import {
-  columnsFetcher,
-  TasksFetcher,
-} from "../../util/fetcher";
+import { columnsFetcher, TasksFetcher } from "../../util/fetcher";
 import Select from "../(headlessComponents)/Select";
 import AppContext from "../(providers)/contextProvider";
 import { Column } from "../../typings";
@@ -72,11 +69,10 @@ function AddTaskModal({ isOpen, setIsOpen }: Props) {
     },
   });
   const { selectedBoard } = useContext(AppContext);
-  const {
-    data: columns,
-    error,
-    mutate,
-  } = useSWR(["/api/getColumns", selectedBoard?.id], columnsFetcher);
+  const { data: columns } = useSWR(
+    `/api/getColumns?boardId=${selectedBoard?.id}`,
+    columnsFetcher
+  );
 
   const [selectedColumn, setSelectedColumn] = useState<Column | null>(
     columns ? columns[0] : null
@@ -134,7 +130,7 @@ function AddTaskModal({ isOpen, setIsOpen }: Props) {
       optimisticData: [...tasks!, clientTask.task],
       rollbackOnError: true,
     });
-    // alert(JSON.stringify({ ...data, status: selectedColumn }));
+
     reset();
   });
 
@@ -191,7 +187,7 @@ function AddTaskModal({ isOpen, setIsOpen }: Props) {
                   className="flex flex-row items-center space-x-2 pb-3"
                 >
                   <input
-                    className="px-3 py-2 border border-gray-200 rounded-md placeholder:text-sm dark:border-gray-600 outline-none bg-transparent flex-1 "
+                    className="px-3 py-2 border border-gray-200 rounded-md placeholder:text-sm dark:border-gray-600 outline-none bg-transparent flex-1 focus:border-gray-400 "
                     {...register(`subtasks.${index}.name`)}
                     placeholder="e.g. Web Design"
                   />

@@ -11,6 +11,8 @@ const AppContext = createContext<{
   setShowTaskModal: (value: boolean) => void;
   selectedBoard: Board | null;
   setSelectedBoard: (value: Board | null) => void;
+  showEditBoardModal: boolean;
+  setShowEditBoardModal: (value: boolean) => void;
 }>({
   showSidebar: true,
   setShowSidebar: (show: boolean) => {},
@@ -20,6 +22,8 @@ const AppContext = createContext<{
   setShowTaskModal: (show: boolean) => {},
   selectedBoard: null,
   setSelectedBoard: (board: any) => {},
+  showEditBoardModal: false,
+  setShowEditBoardModal: (show: boolean) => {},
 });
 
 export default AppContext;
@@ -33,6 +37,7 @@ export const AppContextProvider = ({
   const [showBoardModal, setShowBoardModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState<null | Board>(null);
+  const [showEditBoardModal, setShowEditBoardModal] = useState(false);
 
   return (
     <AppContext.Provider
@@ -45,6 +50,8 @@ export const AppContextProvider = ({
         setShowTaskModal,
         selectedBoard,
         setSelectedBoard,
+        showEditBoardModal,
+        setShowEditBoardModal,
       }}
     >
       {children}

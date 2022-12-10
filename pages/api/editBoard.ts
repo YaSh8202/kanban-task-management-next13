@@ -35,12 +35,6 @@ export default async function handler(
     res.status(400).json({ error: "Missing board" });
   }
 
-  // const columns = board.columns.map((column: { name: string }) => ({
-  //   name: column.name,
-  //   id: uuid(),
-  //   tasks: [],
-  // }));
-
   const newBoard = {
     id: board.id,
     name: board.name,

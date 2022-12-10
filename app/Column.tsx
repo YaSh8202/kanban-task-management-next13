@@ -32,6 +32,7 @@ function Column({ column }: Props) {
     TasksFetcher
   );
 
+  console.log(tasks);
   return (
     <div className="flex flex-col items-start min-w-[15rem] md:min-w-[18rem] space-y-5 mx-3 ">
       <div className="flex flex-row items-center text-gray-500 space-x-2 ">
@@ -45,11 +46,13 @@ function Column({ column }: Props) {
         </p>
       </div>
       {tasks ? (
-        tasks.map((task) => (
-          <div key={task.id} className="w-full">
-            <Task task={task} />
-          </div>
-        ))
+        tasks.map((task) =>
+          task ? (
+            <div key={task.id} className="w-full">
+              <Task task={task} />
+            </div>
+          ) : null
+        )
       ) : (
         <div
           role="status"
