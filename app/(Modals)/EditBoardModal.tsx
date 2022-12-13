@@ -11,7 +11,7 @@ import { v4 as uuid } from "uuid";
 import useSWR from "swr";
 import AppContext from "../(providers)/contextProvider";
 import { Column } from "../../typings";
-import { columnsFetcher } from "../../util/fetcher";
+import { boardsFetcher, columnsFetcher } from "../../util/fetcher";
 
 type FormValues = {
   name: string;
@@ -58,6 +58,7 @@ function EditBoardModal({ columns }: Props) {
     showEditBoardModal: isOpen,
     setShowEditBoardModal: setIsOpen,
     selectedBoard,
+    setSelectedBoard,
   } = useContext(AppContext);
   const [removeColumns, setRemoveColumns] = React.useState<string[]>([]);
   const {
@@ -93,6 +94,10 @@ function EditBoardModal({ columns }: Props) {
   const { mutate: mutateColumns, data } = useSWR(
     `/api/getColumns?boardId=${selectedBoard?.id}`,
     columnsFetcher
+  );
+  const { data: boards, mutate: mutateBoards } = useSWR(
+    "/api/getBoards",
+    boardsFetcher
   );
 
   useEffect(() => {
@@ -147,7 +152,6 @@ function EditBoardModal({ columns }: Props) {
         }),
       });
       const { board } = await newBoard.json();
-      console.log("board", board);
       return data.columns.map((col, i) => ({
         id: clientBoard.columns[i],
         name: col.name,
@@ -165,6 +169,20 @@ function EditBoardModal({ columns }: Props) {
       })),
       rollbackOnError: true,
     });
+
+    mutateBoards(
+      boards?.map((board) => {
+        if (board.id === clientBoard.id) {
+          return {
+            ...board,
+            name: data.name,
+          };
+        }
+        return board;
+      }),
+      false
+    );
+    setSelectedBoard(clientBoard);
 
     reset();
   });
@@ -214,7 +232,6 @@ function EditBoardModal({ columns }: Props) {
                         (col) => col.name === field.name
                       );
                       if (col) {
-                        console.log(col.id);
                         setRemoveColumns([...removeColumns, col.id]);
                       }
                       remove(index);

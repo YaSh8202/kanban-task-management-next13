@@ -32,7 +32,6 @@ function Column({ column }: Props) {
     TasksFetcher
   );
 
-  console.log(tasks);
   return (
     <div className="flex flex-col items-start min-w-[15rem] md:min-w-[18rem] space-y-5 mx-3 ">
       <div className="flex flex-row items-center text-gray-500 space-x-2 ">
