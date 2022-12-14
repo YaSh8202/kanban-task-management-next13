@@ -1,8 +1,6 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import redis from "../../../redis";
-import { v4 as uuid } from "uuid";
-import { Board, Task } from "../../../typings";
+import {  Task } from "../../../typings";
 import { getSession } from "next-auth/react";
 
 type Data = {

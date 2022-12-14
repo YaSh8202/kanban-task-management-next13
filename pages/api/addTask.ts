@@ -38,14 +38,16 @@ export default async function handler(
 
   try {
     await redis.hset(columnId, task.id, JSON.stringify(task));
-    const columnString = await redis.hget(boardId, columnId);
-    if (columnString) {
-      const column = JSON.parse(columnString);
-      column.tasks.push(task.id);
-      await redis.hset(boardId, columnId, JSON.stringify(column));
-    }
+    // const columnString = await redis.hget(boardId, columnId);
+    // if (columnString) {
+    //   const column = JSON.parse(columnString);
+    //   console.log("column", column)
+    //   column?.tasks.push(task.id);
+    //   await redis.hset(boardId, columnId, JSON.stringify(column));
+    // }
     res.status(200).json({ task: task });
   } catch (e) {
     res.status(500).json({ error: "Internal server error" });
+    console.log(e);
   }
 }

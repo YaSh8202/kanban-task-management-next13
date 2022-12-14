@@ -22,7 +22,9 @@ function Boards() {
       className="overflow-y-hidden overflow-x-auto flex flex-row bg-light-main dark:bg-dark-main p-5 scrollbar-thin dark:scrollbar-thumb-dark-side dark:scrollbar-track-dark-main flex-1 scrollbar-thumb-gray-400 scrollbar-track-light-main scrollbar-thumb-rounded-full scrollbar-track-rounded-full "
     >
       {columns &&
-        columns.map((column) => <Column key={column.id} column={column} />)}
+        columns.map((column, i) => (
+          <Column key={column.id} index={i} column={column} />
+        ))}
       {columns && <EditBoardModal columns={columns} />}
     </div>
   );

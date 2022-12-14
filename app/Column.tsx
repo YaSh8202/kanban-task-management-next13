@@ -6,6 +6,7 @@ import Task from "./Task";
 
 type Props = {
   column: Column;
+  index: number;
 };
 
 const tailwindColors = [
@@ -24,9 +25,21 @@ const tailwindColors = [
   "bg-cyan-500",
   "bg-rose-500",
   "bg-fuchsia-500",
+  "bg-violet-500",
+  "bg-sky-500",
 ];
 
-function Column({ column }: Props) {
+function randomNumsArray(length: number) {
+  let arr = [];
+  while (arr.length < length) {
+    let r = Math.floor(Math.random() * 100) + 1;
+    if (arr.indexOf(r) === -1) arr.push(r);
+  }
+  console.log(arr);
+  return arr;
+}
+
+function Column({ column, index }: Props) {
   const { data: tasks, error } = useSWR(
     `/api/tasks/${column.id}`,
     TasksFetcher
@@ -37,7 +50,7 @@ function Column({ column }: Props) {
       <div className="flex flex-row items-center text-gray-500 space-x-2 ">
         <span
           className={`w-3 h-3 ${
-            tailwindColors[Math.floor(Math.random() * tailwindColors.length)]
+            tailwindColors[index % tailwindColors.length]
           } rounded-full`}
         ></span>
         <p className=" font-semibold text-xs uppercase tracking-widest">

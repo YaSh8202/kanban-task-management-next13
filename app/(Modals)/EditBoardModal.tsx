@@ -152,21 +152,25 @@ function EditBoardModal({ columns }: Props) {
         }),
       });
       const { board } = await newBoard.json();
-      return data.columns.map((col, i) => ({
-        id: clientBoard.columns[i],
-        name: col.name,
-        // tasks: [],
-      }));
+      return data.columns
+        .map((col, i) => ({
+          id: clientBoard.columns[i],
+          name: col.name,
+          // tasks: [],
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
     };
     // await uploadBoardToUpstash();
     // await globalMutate("/api/getColumns");
     // await uploadBoardToUpstash();
     mutateColumns(uploadBoardToUpstash, {
-      optimisticData: data.columns.map((col, i) => ({
-        id: clientBoard.columns[i],
-        name: col.name,
-        // tasks: [],
-      })),
+      optimisticData: data.columns
+        .map((col, i) => ({
+          id: clientBoard.columns[i],
+          name: col.name,
+          // tasks: [],
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
       rollbackOnError: true,
     });
 
