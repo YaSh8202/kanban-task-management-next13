@@ -7,7 +7,6 @@ import lightLogo from "../public/assets/logo-light.svg";
 import ThemeSwitch from "./ThemeSwitch";
 import Link from "next/link";
 import MemoIconBoard from "./(iconsSvgr)/IconBoard";
-import AddBoardModal from "./(Modals)/AddBoardModal";
 import AppContext from "./(providers)/contextProvider";
 import { Board } from "../typings";
 import { Transition } from "@headlessui/react";
