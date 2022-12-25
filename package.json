@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.4",
+    "@heroicons/react": "^2.0.13",
     "@storybook/addon-cssresources": "^6.2.9",
     "ioredis": "^5.2.4",
     "next": "latest",

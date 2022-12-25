@@ -16,7 +16,7 @@ function Dashboard() {
   const { data: boards } = useSWR("/api/getBoards", boardsFetcher);
 
   return (
-    <main className="grid grid-cols-10 grid-rows-1 min-h-screen min-w-full ">
+    <main className="grid grid-cols-10 grid-rows-1 h-screen w-screen ">
       <Sidebar boards={boards} />
       <div
         className={`col-span-10 flex flex-col h-full transition-all duration-300 ${
