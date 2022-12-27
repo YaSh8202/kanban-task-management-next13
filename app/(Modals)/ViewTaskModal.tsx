@@ -18,6 +18,7 @@ import Select from "../(headlessComponents)/Select";
 import AppContext from "../(providers)/contextProvider";
 import { Column, Task } from "../../typings";
 import { takeCoverage } from "v8";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   isOpen: boolean;
@@ -43,7 +44,6 @@ function ViewTaskModal({ isOpen, setIsOpen, task }: Props) {
     columns &&
       (columns.filter((col) => col.name === task.status)[0] || columns[0])
   );
-
 
   const {
     data: prevColTasks,
@@ -80,24 +80,22 @@ function ViewTaskModal({ isOpen, setIsOpen, task }: Props) {
 
     await prevMutate();
     await newMutate();
-    // alert(JSON.stringify({ ...data, status: selectedColumn }));
   };
-
-
-  // const onClose = () => {
-  //   setIsOpen(false);
-  //   console.log("taskState", taskState);
-  // };
 
   return (
     <MyModal isOpen={isOpen} closeModal={onClose}>
       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-dark-side p-6 text-left align-middle shadow-xl transition-all space-y-4 ">
-        <Dialog.Title
-          as="h3"
-          className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50 mb-1 "
-        >
-          {taskState.title}
-        </Dialog.Title>
+        <div className="flex flex-row items-center justify-between">
+          <Dialog.Title
+            as="h3"
+            className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50 mb-1 "
+          >
+            {taskState.title}
+          </Dialog.Title>
+          <button>
+            <TrashIcon className="h-5 w-5 text-gray-400 hover:text-gray-500" />
+          </button>
+        </div>
         <div className="">
           <p className="text-gray-400 text-sm ">{taskState.description}</p>
         </div>

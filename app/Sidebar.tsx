@@ -18,20 +18,10 @@ type Props = {
   boards: Board[] | undefined;
 };
 
-function Sidebar({ boards }: Props) {
-  const {
-    setShowSidebar,
-    setSelectedBoard,
-    selectedBoard,
-    setShowBoardModal,
-    showSidebar,
-  } = useContext(AppContext);
+function Sidebar() {
+  const { setShowSidebar, showSidebar } = useContext(AppContext);
 
   const [isOpen, setIsOpen] = useState(showSidebar);
-
-  function addNewBoard() {
-    setShowBoardModal(true);
-  }
 
   function resetSidebar() {
     setIsOpen(false);
@@ -43,7 +33,6 @@ function Sidebar({ boards }: Props) {
   useEffect(() => {
     setIsOpen(showSidebar);
   }, [showSidebar]);
-
   return (
     <Transition
       show={isOpen}
@@ -55,7 +44,7 @@ function Sidebar({ boards }: Props) {
       leaveFrom="translate-x-0"
       leaveTo="-translate-x-full"
     >
-      <aside className=" bg-clip-border absolute md:relative w-4/5 md:w-auto z-10 flex flex-col h-full items-start  md:col-span-2 py-3 border-r dark:border-gray-600 bg-white dark:bg-dark-side shadow overflow-hidden justify-between ">
+      <aside className=" absolute md:relative w-4/5 md:w-auto z-10 flex flex-col h-full items-start  md:col-span-2 py-3 border-r dark:border-gray-600 bg-white dark:bg-dark-side shadow overflow-hidden justify-between ">
         <div className="ml-4 lg:ml-6 h-12 flex items-center pr-4 ">
           <button onClick={resetSidebar} className=" relative w-32 h-6  ">
             <Image
@@ -72,32 +61,8 @@ function Sidebar({ boards }: Props) {
             />
           </button>
         </div>
-        <div className="flex flex-1 flex-col mt-6 items-start justify-between w-full pr-5  ">
-          <div className="flex flex-col w-full group  ">
-            <p className="text-gray-600 ml-6 dark:text-gray-400 font-medium text-xs tracking-widest ">
-              ALL BOARDS ({boards?.length})
-            </p>
-            <div className="mt-3 flex flex-col space-y-1 overflow-y-auto max-h-[80%] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-transparent group-hover:scrollbar-thumb-primary/50 scrollbar-track-rounded-md scrollbar-thumb-rounded-md">
-              {boards ? (
-                boards
-                  .sort((a, b) => {
-                    return a.name?.localeCompare(b.name);
-                  })
-                  .map((board) => <BoardBtn key={board.id} board={board} />)
-              ) : (
-                <p>Loading...</p>
-              )}
-            </div>
-            <button
-              onClick={addNewBoard}
-              className=" rounded-r-full  py-2.5 w-full text-left pl-12 flex flex-row items-center space-x-2 ml-[-20px] text-primary  duration-100 hover:brightness-125 "
-            >
-              <MemoIconBoard className="text-primary" />
-              <p>+Create New Board</p>
-            </button>
-          </div>
-        </div>
-        <div className="w-full px-2 ">
+        <BoardsList />
+        <div className="w-full px-2  ">
           <ThemeSwitch />
           <button
             onClick={resetSidebar}
@@ -120,6 +85,39 @@ function Sidebar({ boards }: Props) {
 }
 
 export default Sidebar;
+
+const BoardsList = () => {
+  const { data: boards } = useSWR("/api/getBoards", boardsFetcher);
+  const { setShowBoardModal } = useContext(AppContext);
+  function addNewBoard() {
+    setShowBoardModal(true);
+  }
+  return (
+    <div className="flex flex-1 flex-col group mt-6 items-start w-full pr-5 overflow-auto  ">
+      <p className="text-gray-600 ml-6 dark:text-gray-400 font-medium text-xs tracking-widest ">
+        ALL BOARDS ({boards?.length})
+      </p>
+      <div className="mt-3 flex flex-col space-y-1  w-full overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-transparent group-hover:scrollbar-thumb-primary/50 scrollbar-track-rounded-md scrollbar-thumb-rounded-md">
+        {boards ? (
+          boards
+            .sort((a, b) => {
+              return a.name?.localeCompare(b.name);
+            })
+            .map((board) => <BoardBtn key={board.id} board={board} />)
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+      <button
+        onClick={addNewBoard}
+        className=" rounded-r-full  py-2.5 w-full text-left pl-12 flex flex-row items-center space-x-2 ml-[-20px] text-primary  duration-100 hover:brightness-125 "
+      >
+        <MemoIconBoard className="text-primary" />
+        <p>+Create New Board</p>
+      </button>
+    </div>
+  );
+};
 
 const BoardBtn = ({ board }: { board: Board }) => {
   const { selectedBoard, setSelectedBoard, setShowSidebar } =
