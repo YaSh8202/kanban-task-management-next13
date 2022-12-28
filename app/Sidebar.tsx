@@ -5,7 +5,6 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import darkLogo from "../public/logo-dark.svg";
 import lightLogo from "../public/assets/logo-light.svg";
 import ThemeSwitch from "./ThemeSwitch";
-import Link from "next/link";
 import MemoIconBoard from "./(iconsSvgr)/IconBoard";
 import AppContext from "./(providers)/contextProvider";
 import { Board } from "../typings";
