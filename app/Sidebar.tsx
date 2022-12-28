@@ -12,11 +12,16 @@ import { Transition } from "@headlessui/react";
 import { TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import useSWR from "swr";
 import { boardsFetcher } from "../util/fetcher";
-
-type Props = {
-  boards: Board[] | undefined;
+import Lottie from "react-lottie";
+import animationData from "../util/loading-lottie.json";
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
 };
-
 function Sidebar() {
   const { setShowSidebar, showSidebar } = useContext(AppContext);
 
@@ -104,7 +109,7 @@ const BoardsList = () => {
             })
             .map((board) => <BoardBtn key={board.id} board={board} />)
         ) : (
-          <p>Loading...</p>
+          <Lottie options={defaultOptions} height={200} width={200} />
         )}
       </div>
       <button
