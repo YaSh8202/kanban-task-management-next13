@@ -10,6 +10,7 @@ function SignInPage() {
           Kanban Task Management
         </h1>
         <button
+          role={"login"}
           onClick={() => signIn("google", { callbackUrl: "/" })}
           className="flex w-full max-w-[16rem] mx-auto  items-center bg-[#1a73e8]  pr-0  duration-150 hover:opacity-90 my-12 "
         >
