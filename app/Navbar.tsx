@@ -40,6 +40,7 @@ function Navbar({ selectedBoard }: Props) {
           disabled={!selectedBoard}
           onClick={() => setShowTaskModal(true)}
           className=" bg-primary/90 px-3 md:px-4 py-2 text-white rounded-full hover:bg-primary hover:shadow-md hover:scale-105 duration-100 disabled:cursor-not-allowed disabled:opacity-70 active:scale-95 group "
+          role={"addTask"}
         >
           <Image
             src={addTaskMobile}

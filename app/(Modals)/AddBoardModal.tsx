@@ -145,7 +145,11 @@ function AddBoardModal({ data }: Props) {
         >
           Add New Board
         </Dialog.Title>
-        <form className="mt-3 flex flex-col space-y-4 " onSubmit={onSubmit}>
+        <form
+          role={"newBoardForm"}
+          className="mt-3 flex flex-col space-y-4 "
+          onSubmit={onSubmit}
+        >
           <div className="flex flex-col space-y-0.5 ">
             <label className="text-sm text-gray-600 font-medium dark:text-gray-300 ">
               Board Name
@@ -191,6 +195,7 @@ function AddBoardModal({ data }: Props) {
             )}
             <button
               type="button"
+              data-cy={"addColumn"}
               onClick={() => {
                 append({ name: "" });
               }}

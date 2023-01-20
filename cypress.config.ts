@@ -11,5 +11,10 @@ export default defineConfig({
     },
     baseUrl: "http://localhost:3000",
     chromeWebSecurity: false,
+    specPattern: [
+      "cypress/e2e/01_login.cy.ts",
+      "cypress/e2e/02_board.cy.ts",
+    ],
+    experimentalRunAllSpecs: true,
   },
 });

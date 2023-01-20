@@ -13,18 +13,29 @@ type Props = {
 };
 
 export default function Select({ options, selected, setSelected }: Props) {
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Listbox value={selected} onChange={setSelected}>
       <div className="relative mt-1">
-        <Listbox.Button className="relative w-full cursor-default rounded-md bg-transparent py-2 pl-3 pr-10 text-left focus:outline-none  focus-visible:ring-1 focus-visible:ring-gray-300 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 sm:text-sm border-gray-200 dark:border-gray-600 border ">
+        <Listbox.Button
+          data-cy={"select"}
+          onClick={() => setIsOpen(!isOpen)}
+          className="relative w-full cursor-default rounded-md bg-transparent py-2 pl-3 pr-10 text-left focus:outline-none  focus-visible:ring-1 focus-visible:ring-gray-300 focus-visible:ring-opacity-75 focus-visible:ring-offset-2 sm:text-sm border-gray-200 dark:border-gray-600 border "
+        >
           <span className="block truncate">{selected?.name}</span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+          <span
+            className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 `}
+          >
             <Image
               src={ChevronDownIcon}
               className="h-2 w-3 text-gray-400"
               alt="downIcon"
               // aria-hidden="true"
+              style={{
+
+                transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "all 0.2s",
+              }}
             />
           </span>
         </Listbox.Button>
@@ -39,6 +50,7 @@ export default function Select({ options, selected, setSelected }: Props) {
               options.map((person, personIdx) => (
                 <Listbox.Option
                   key={personIdx}
+                  data-cy={person.name}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2 pl-10 pr-4 ${
                       active
@@ -51,6 +63,7 @@ export default function Select({ options, selected, setSelected }: Props) {
                   {({ selected }) => (
                     <>
                       <span
+
                         className={`block truncate ${
                           selected ? "font-medium" : ""
                         }`}

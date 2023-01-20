@@ -207,6 +207,7 @@ function AddTaskModal({ isOpen, setIsOpen }: Props) {
             )}
             <button
               type="button"
+              data-cy={"add-subtask"}
               onClick={() => {
                 append({ name: "" });
               }}
