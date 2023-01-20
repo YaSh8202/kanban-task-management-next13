@@ -14,9 +14,10 @@ function Dashboard() {
   const { showSidebar, selectedBoard } = useContext(AppContext);
 
   return (
-    <main className="grid grid-cols-10 grid-rows-1 h-screen w-screen ">
+    <main className="grid grid-cols-10 grid-rows-1 h-screen w-screen main ">
       <Sidebar />
       <div
+        id="#main"
         className={`col-span-10 flex flex-col h-full transition-all duration-300 ${
           showSidebar ? "md:col-span-8" : "md:col-span-10"
         }    `}
