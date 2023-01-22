@@ -8,7 +8,7 @@ import AppContext from "../(providers)/contextProvider";
 
 export default function MenuComponent() {
   const { data: session } = useSession();
-  const { setShowEditBoardModal } = useContext(AppContext);
+  const { setShowEditBoardModal, selectedBoard } = useContext(AppContext);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -61,22 +61,24 @@ export default function MenuComponent() {
                 </div>
               )}
             </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => {
-                    setShowEditBoardModal(true);
-                  }}
-                  className={`${
-                    active
-                      ? "bg-primary text-white"
-                      : "text-gray-900 bg-white dark:text-gray-100 dark:bg-dark-side/80 "
-                  } group flex w-full items-center  px-2 py-2 text-sm font-semibold  `}
-                >
-                  Edit Board
-                </button>
-              )}
-            </Menu.Item>
+            {selectedBoard && (
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={() => {
+                      setShowEditBoardModal(true);
+                    }}
+                    className={`${
+                      active
+                        ? "bg-primary text-white"
+                        : "text-gray-900 bg-white dark:text-gray-100 dark:bg-dark-side/80 "
+                    } group flex w-full items-center  px-2 py-2 text-sm font-semibold   `}
+                  >
+                    Edit Board
+                  </button>
+                )}
+              </Menu.Item>
+            )}
             <Menu.Item>
               {({ active }) => (
                 <button

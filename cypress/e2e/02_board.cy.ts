@@ -44,8 +44,31 @@ describe("New Board", () => {
   });
 
   // Edit Task
-  
+  it("Edit Task", () => {
+    cy.contains("Test Task").should("exist").click();
+    cy.get("label").contains("Test Subtask").parent().find("input").check();
+    cy.get("label").contains("Test Subtask 2").parent().find("input").check();
+    cy.get('button[data-cy="select"]').click();
+    cy.get('li[data-cy="Column One"]').click();
+    cy.get(".fixed.inset-0.bg-black.bg-opacity-25.opacity-100").click({
+      force: true,
+    });
+    cy.wait(2000);
+    cy.contains("Test Task", {})
+      .should("exist", {})
+      .parent()
+      .parent()
+      .siblings()
+      .contains("Column One")
+      .should("exist");
+    cy.contains("Test Task").click();
+    cy.contains("Test Subtask").parent().find("input").should("be.checked");
+    cy.contains("Test Subtask 2").parent().find("input").should("be.checked");
+    cy.get("button[data-cy='select']").get("span").contains("Column One").should("exist");
+  });
+
   // Delete Task
+  
 
   // Delete Board
 
