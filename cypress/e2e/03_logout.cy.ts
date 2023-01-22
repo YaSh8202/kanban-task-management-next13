@@ -16,3 +16,5 @@ describe("New Board", () => {
     cy.url().should("include", "/auth/signin");
   });
 });
+
+export {};
