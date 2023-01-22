@@ -121,7 +121,7 @@ function ViewTaskModal({ isOpen, setIsOpen, task }: Props) {
             >
               {taskState.title}
             </Dialog.Title>
-            <button onClick={() => setIsDeleteModalOpen(true)}>
+            <button data-cy={"deleteTask"} onClick={() => setIsDeleteModalOpen(true)}>
               <TrashIcon className="h-5 w-5 text-gray-400 hover:text-gray-500" />
             </button>
           </div>
@@ -197,6 +197,7 @@ function ViewTaskModal({ isOpen, setIsOpen, task }: Props) {
               Cancel
             </button>
             <button
+              data-cy={"confirmDelete"}
               onClick={deleteTask}
               className="text-red-400 hover:text-red-500 ml-2 px-1  "
             >

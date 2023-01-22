@@ -190,6 +190,7 @@ const BoardBtn = ({ board }: { board: Board }) => {
         (deleteBoard ? (
           <div className="flex flex-row space-x-2">
             <CheckIcon
+              data-cy={"confirmDeleteBoard"}
               onClick={() => {
                 setSelectedBoard(null);
                 deleteBoardHandler();
@@ -204,6 +205,7 @@ const BoardBtn = ({ board }: { board: Board }) => {
           </div>
         ) : (
           <TrashIcon
+            data-cy={"deleteBoard"}
             onClick={(e) => {
               setDeleteBoard(true);
             }}

@@ -14,6 +14,7 @@ export default defineConfig({
     specPattern: [
       "cypress/e2e/01_login.cy.ts",
       "cypress/e2e/02_board.cy.ts",
+      "cypress/e2e/03_logout.cy.ts",
     ],
     experimentalRunAllSpecs: true,
   },

@@ -46,8 +46,20 @@ describe("New Board", () => {
   // Edit Task
   it("Edit Task", () => {
     cy.contains("Test Task").should("exist").click();
-    cy.get("label").contains("Test Subtask").parent().find("input").check();
-    cy.get("label").contains("Test Subtask 2").parent().find("input").check();
+    cy.get("label")
+      .contains("Test Subtask", {
+        matchCase: true,
+      })
+      .parent()
+      .find("input")
+      .check();
+    cy.get("label")
+      .contains("Test Subtask 2", {
+        matchCase: true,
+      })
+      .parent()
+      .find("input")
+      .check();
     cy.get('button[data-cy="select"]').click();
     cy.get('li[data-cy="Column One"]').click();
     cy.get(".fixed.inset-0.bg-black.bg-opacity-25.opacity-100").click({
@@ -55,7 +67,7 @@ describe("New Board", () => {
     });
     cy.wait(2000);
     cy.contains("Test Task", {})
-      .should("exist", {})
+      .should("exist")
       .parent()
       .parent()
       .siblings()
@@ -64,15 +76,28 @@ describe("New Board", () => {
     cy.contains("Test Task").click();
     cy.contains("Test Subtask").parent().find("input").should("be.checked");
     cy.contains("Test Subtask 2").parent().find("input").should("be.checked");
-    cy.get("button[data-cy='select']").get("span").contains("Column One").should("exist");
+    cy.get("button[data-cy='select']")
+      .get("span")
+      .should("contain", "Column One");
+    cy.get(".fixed.inset-0.bg-black.bg-opacity-25.opacity-100").click({
+      force: true,
+    });
   });
 
   // Delete Task
-  
+  it("Delete Task", () => {
+    cy.contains("Test Task").parent().click();
+    cy.get('button[data-cy="deleteTask"]').click();
+    cy.get('button[data-cy="confirmDelete"]').click();
+    cy.contains("Test Task").should("not.exist");
+  });
 
   // Delete Board
-
-  // Logout
+  it("Delete Board", () => {
+    cy.get('[data-cy="deleteBoard"]').click();
+    cy.get('[data-cy="confirmDeleteBoard"]').click();
+    cy.contains("Test Board").should("not.exist");
+  });
 });
 
 export {};

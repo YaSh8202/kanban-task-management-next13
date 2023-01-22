@@ -13,7 +13,7 @@ export default function MenuComponent() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-full justify-center rounded-md  bg-opacity-20 px-1 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+        <Menu.Button data-cy={"menuBtn"} className="inline-flex w-full justify-center rounded-md  bg-opacity-20 px-1 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
           <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
             <g fill="#828FA3" fillRule="evenodd">
               <circle cx="2.308" cy="2.308" r="2.308" />
@@ -82,6 +82,7 @@ export default function MenuComponent() {
             <Menu.Item>
               {({ active }) => (
                 <button
+                  data-cy={"logoutBtn"}
                   onClick={() => signOut()}
                   className={`${
                     active
