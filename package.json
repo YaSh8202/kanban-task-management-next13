@@ -14,6 +14,7 @@
     "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^2.0.13",
     "@storybook/addon-cssresources": "^6.2.9",
+    "@vercel/og": "^0.1.0",
     "ioredis": "^5.2.4",
     "next": "latest",
     "next-auth": "^4.17.0",
