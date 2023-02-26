@@ -46,6 +46,7 @@ describe("New Board", () => {
   // Edit Task
   it("Edit Task", () => {
     cy.contains("Test Task").should("exist").click();
+    cy.wait(1000);
     cy.get("label")
       .contains("Test Subtask", {
         matchCase: true,
