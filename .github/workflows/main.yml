@@ -6,7 +6,7 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     env:
-      NEXTAUTH_SECRET: ${{secrets.NEXTAUTH_SECRET}}
+      NEXTAUTH_SECRET: "1415935cbdb9a286c300042e62731a31"
       REDIS_URL: ${{secrets.REDIS_URL}}
       GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
       GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: "Create env file"
-        run: echo "${{ secrets.ENV_FILE }}" > .env
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
