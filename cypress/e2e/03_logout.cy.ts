@@ -1,11 +1,13 @@
 describe("New Board", () => {
   before(() => {
     cy.log(`Visiting http://localhost:3000`);
-    const cookieName = Cypress.env("COOKIE_NAME");
-    const cookie = cy.getCookie(cookieName);
-    if (!cookie) {
-      cy.log(`Cookie ${cookieName} not found`);
-    }
+    const user = {
+      name: "Test User",
+      email: "test@cypress.com",
+      birthdate: "12/02/13",
+      image: "https://i.imgur.com/4KeKvtH.png",
+    };
+    cy.login(user);
     cy.visit("/");
   });
 

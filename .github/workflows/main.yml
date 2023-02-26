@@ -6,12 +6,15 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
+      - name: "Create env file"
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
       - name: Checkout
         uses: actions/checkout@v3
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
-        uses: cypress-io/github-action@v5.x.x # use the explicit version number
+        uses: cypress-io/github-action@v5 # use the explicit version number
         with:
-          build: yarn run build
-          start: npm start
+          build: yarn build
+          start: yarn start

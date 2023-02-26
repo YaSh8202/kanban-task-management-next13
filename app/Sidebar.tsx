@@ -113,7 +113,7 @@ const BoardsList = () => {
         )}
       </div>
       <button
-        role={"newBoardBtn"}
+        data-testid={"newBoardBtn"}
         onClick={addNewBoard}
         className=" rounded-r-full  py-2.5 w-full text-left pl-12 flex flex-row items-center space-x-2 ml-[-20px] text-primary  duration-100 hover:brightness-125 "
       >

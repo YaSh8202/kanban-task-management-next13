@@ -1,16 +1,19 @@
 describe("New Board", () => {
   before(() => {
     cy.log(`Visiting http://localhost:3000`);
-    const cookieName = Cypress.env("COOKIE_NAME");
-    const cookie = cy.getCookie(cookieName);
-    if (!cookie) {
-      cy.log(`Cookie ${cookieName} not found`);
-    }
+    const user = {
+      name: "Test User",
+      email: "test@cypress.com",
+      birthdate: "12/02/13",
+      image: "https://i.imgur.com/4KeKvtH.png",
+    };
+    cy.login(user);
     cy.visit("/");
   });
   it("Create a new board", () => {
     cy.visit("/");
-    cy.get('[role="newBoardBtn').click();
+    cy.wait(1000);
+    cy.get("[data-testid=newBoardBtn]").click();
     // cy.get('[role="addBoardForm"]');
     cy.get('input[name="name"]').type("Test Board");
     cy.get('input[name="columns.0.name"]').type("Column One");
@@ -45,15 +48,15 @@ describe("New Board", () => {
 
   // Edit Task
   it("Edit Task", () => {
-    cy.contains("Test Task").should("exist").click();
     cy.wait(1000);
+    cy.contains("Test Task").should("exist").click();
     cy.get("label")
       .contains("Test Subtask", {
         matchCase: true,
       })
       .parent()
       .find("input")
-      .check();
+      .click();
     cy.get("label")
       .contains("Test Subtask 2", {
         matchCase: true,

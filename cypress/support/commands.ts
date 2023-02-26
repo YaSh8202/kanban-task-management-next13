@@ -1,6 +1,7 @@
-/// <reference types="cypress" />
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../support/index.d.ts" />
 // ***********************************************
-// This example commands.ts shows you how to
+// This example commands.js shows you how to
 // create various custom commands and overwrite
 // existing commands.
 //
@@ -24,16 +25,43 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
 
-export {};
+import hkdf from "@panva/hkdf";
+import { EncryptJWT, JWTPayload } from "jose";
+
+// Function logic derived from https://github.com/nextauthjs/next-auth/blob/5c1826a8d1f8d8c2d26959d12375704b0a693bfc/packages/next-auth/src/jwt/index.ts#L113-L121
+async function getDerivedEncryptionKey(secret: string) {
+  return await hkdf(
+    "sha256",
+    secret,
+    "",
+    "NextAuth.js Generated Encryption Key",
+    32
+  );
+}
+
+// Function logic derived from https://github.com/nextauthjs/next-auth/blob/5c1826a8d1f8d8c2d26959d12375704b0a693bfc/packages/next-auth/src/jwt/index.ts#L16-L25
+export async function encode(
+  token: JWTPayload,
+  secret: string
+): Promise<string> {
+  const maxAge = 30 * 24 * 60 * 60; // 30 days
+  const encryptionSecret = await getDerivedEncryptionKey(secret);
+  return await new EncryptJWT(token)
+    .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
+    .setIssuedAt()
+    .setExpirationTime(Math.round(Date.now() / 1000 + maxAge))
+    .setJti("test")
+    .encrypt(encryptionSecret);
+}
+
+Cypress.Commands.add("login", (userObj: JWTPayload) => {
+  // Generate and set a valid cookie from the fixture that next-auth can decrypt
+  cy.wrap(null)
+    .then(() => {
+      return encode(userObj, Cypress.env("NEXTAUTH_JWT_SECRET"));
+    })
+    .then((encryptedToken) =>
+      cy.setCookie("next-auth.session-token", encryptedToken)
+    );
+});
