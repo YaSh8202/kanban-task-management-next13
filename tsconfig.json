@@ -30,7 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "cypress/support/commands.js", "cypress/e2e/03_logout.cy.js", "cypress/e2e/02_board.cy.js", "cypress/e2e/01_login.cy.ts", "cypress/support/e2e.js"  ],
   "exclude": [
     "node_modules"
   ]
