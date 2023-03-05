@@ -1,6 +1,6 @@
 name: Cypress Tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   cypress-run:
@@ -14,8 +14,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          envkey_REDIS_URL: ${{ secrets.REDIS_URL }}
+          envkey_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          envkey_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          envkey_NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
       - name: Cypress run
         uses: cypress-io/github-action@v5 # use the explicit version number
         with:
