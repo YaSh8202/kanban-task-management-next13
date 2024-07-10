@@ -5,12 +5,6 @@ on: [push, pull_request]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    env:
-      NEXTAUTH_SECRET: "1415935cbdb9a286c300042e62731a31"
-      REDIS_URL: ${{secrets.REDIS_URL}}
-      GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
-      GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
-      NEXTAUTH_URL: ${{secrets.NEXTAUTH_URL}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
